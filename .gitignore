@@ -15,7 +15,6 @@
 *.opendb
 *.psess
 *.db
-*.so
 *.xcuserstate
 *~
 
