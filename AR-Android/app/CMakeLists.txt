@@ -6,20 +6,24 @@ cmake_minimum_required(VERSION 3.4.1)
 add_definitions(-DSL_GUI_JAVA)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/slproject)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/Shoemake/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/half/include)
+
 #
 # SLProject
 #
-add_library(lib_slexternal SHARED IMPORTED)
-set_target_properties(lib_slexternal PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/liblib-SLExternal.a)
+file(GLOB_RECURSE sl_SOURCES "../../*.cpp")
+file(GLOB_RECURSE sl_HEADERS "../../*.h" "../../*.hpp")
 
-add_library(lib_slproject SHARED IMPORTED)
-set_target_properties(lib_slproject PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/liblib-SLProject.a)
+set (sl_INCLUDE_DIRS "")
+foreach (_headerFile ${sl_HEADERS})
+    get_filename_component(_dir ${_headerFile} PATH)
+    list (APPEND sl_INCLUDE_DIRS ${_dir})
+endforeach()
+list(REMOVE_DUPLICATES sl_INCLUDE_DIRS)
 
-add_library(lib_assimp SHARED IMPORTED)
-set_target_properties(lib_assimp PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/liblib-assimp.a)
+include_directories(${sl_INCLUDE_DIRS})
+
+# Buggy
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLExternal)
 
 #
 # OpenCV
@@ -36,6 +40,7 @@ add_library( # Sets the name of the library.
              # Associated headers in the same location as their source
              # file are automatically included.
              src/main/cpp/native-lib.cpp
+             ${sl_SOURCES}
              )
 
 find_library( # Sets the name of the path variable.
@@ -49,12 +54,7 @@ find_library( # Sets the name of the path variable.
 # can link multiple libraries, such as libraries you define in the
 # build script, prebuilt third-party libraries, or system libraries.
 
-target_link_libraries( native-lib ${lib_slproject})
-
-target_link_libraries(  native-lib
-                        lib_slproject
-                        lib_slexternal
-                        lib_assimp
+target_link_libraries(native-lib
                         lib_opencv
                         ${OPENGL_LIBRARIES}
                         ${log-lib}
