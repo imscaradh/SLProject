@@ -391,7 +391,11 @@ GLuint glUtils::build3DTexture(const std::vector<std::string> &files,
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, wrapS);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, wrapT);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, wrapR);
-	glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, borderColor.data());
+#if defined(SL_OS_ANDROID) and defined(SL_GUI_JAVA)
+	glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR_EXT, borderColor.data());
+#else
+    glTexParameterfv(GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, borderColor.data());
+#endif
 
     x_extend = first.width();
     y_extend = first.height();

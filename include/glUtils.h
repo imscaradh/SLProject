@@ -70,9 +70,15 @@ class glUtils
         static GLuint build3DTexture(const std::vector<std::string> &files, int &x_extend, int &y_extend, int &z_extend,
                                      GLint min_filter = GL_LINEAR,
                                      GLint mag_filter = GL_LINEAR,
+                                #if defined(SL_OS_ANDROID) and defined(SL_GUI_JAVA)
+                                     GLint wrapR = GL_CLAMP_TO_BORDER_EXT,
+                                     GLint wrapS = GL_CLAMP_TO_BORDER_EXT,
+                                     GLint wrapT = GL_CLAMP_TO_BORDER_EXT,
+                                #else
                                      GLint wrapR = GL_CLAMP_TO_BORDER,
                                      GLint wrapS = GL_CLAMP_TO_BORDER,
                                      GLint wrapT = GL_CLAMP_TO_BORDER,
+                                #endif
 									 const std::array<GLfloat, 4> &borderColor = {0.0f, 0.0f, 0.0f, 0.0f});
         
         //! Checks if an OpenGL error occurred
