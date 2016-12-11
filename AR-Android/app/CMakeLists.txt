@@ -10,8 +10,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/include)
 #
 # SLProject
 #
-file(GLOB_RECURSE sl_SOURCES "../../*.cpp")
-file(GLOB_RECURSE sl_HEADERS "../../*.h" "../../*.hpp")
+file(GLOB_RECURSE sl_SOURCES    "../../lib-SLProject/*.cpp"
+                                "../../lib-SLExternal/*.cpp")
+list(REMOVE_ITEM sl_SOURCES     "${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLProject/source/SLLightSphere.cpp"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLProject/source/SLRayMC.cpp"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLProject/source/SLPhotonMap.cpp"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLProject/source/SLPhotonMapper.cpp"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLProject/source/SLKDTree.cpp")
+
+file(GLOB_RECURSE sl_HEADERS    "../../include/*.h"
+                                "../../include/*.hpp"
+                                "../../lib-SLProject/*.h"
+                                "../../lib-SLProject/*.hpp"
+                                "../../lib-SLExternal/*.h"
+                                "../../lib-SLExternal/*.hpp")
 
 set (sl_INCLUDE_DIRS "")
 foreach (_headerFile ${sl_HEADERS})
@@ -19,11 +31,11 @@ foreach (_headerFile ${sl_HEADERS})
     list (APPEND sl_INCLUDE_DIRS ${_dir})
 endforeach()
 list(REMOVE_DUPLICATES sl_INCLUDE_DIRS)
-
 include_directories(${sl_INCLUDE_DIRS})
 
 # Buggy
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLExternal)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib-SLExternal/assimp/include)
 
 #
 # OpenCV

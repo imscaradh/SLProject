@@ -66,16 +66,10 @@
 /* #undef HAVE_DSHOW */
 
 /* Eigen Matrix & Linear Algebra Library */
-/* #undef HAVE_EIGEN */
+#define HAVE_EIGEN
 
 /* FFMpeg video library */
 /* #undef HAVE_FFMPEG */
-
-/* ffmpeg's libswscale */
-/* #undef HAVE_FFMPEG_SWSCALE */
-
-/* ffmpeg in Gentoo */
-/* #undef HAVE_GENTOO_FFMPEG */
 
 /* Geospatial Data Abstraction Library */
 /* #undef HAVE_GDAL */
@@ -111,6 +105,9 @@
 /* libpng/png.h needs to be included */
 /* #undef HAVE_LIBPNG_PNG_H */
 
+/* GDCM DICOM codec */
+/* #undef HAVE_GDCM */
+
 /* V4L/V4L2 capturing support via libv4l */
 /* #undef HAVE_LIBV4L */
 
@@ -119,6 +116,9 @@
 
 /* NVidia Video Decoding API*/
 /* #undef HAVE_NVCUVID */
+
+/* NVidia Video Encoding API*/
+/* #undef HAVE_NVCUVENC */
 
 /* OpenCL Support */
 /* #undef HAVE_OPENCL */
@@ -159,7 +159,7 @@
 /* #undef HAVE_QTKIT */
 
 /* Intel Threading Building Blocks */
-#define HAVE_TBB
+/* #undef HAVE_TBB */
 
 /* TIFF codec */
 #define HAVE_TIFF
@@ -194,3 +194,21 @@
 
 /* Intel VA-API/OpenCL */
 /* #undef HAVE_VA_INTEL */
+
+/* Lapack */
+/* #undef HAVE_LAPACK */
+
+/* Lapack Generic */
+/* #undef HAVE_LAPACK_GENERIC */
+
+/* Lapack MKL */
+/* #undef HAVE_LAPACK_MKL */
+
+/* FP16 */
+/* #undef HAVE_FP16 */
+
+/* Library was compiled with functions instrumentation */
+/* #undef ENABLE_INSTRUMENTATION */
+
+/* OpenVX */
+/* #undef HAVE_OPENVX */
