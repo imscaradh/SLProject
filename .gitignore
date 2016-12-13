@@ -39,3 +39,5 @@ GenerateHTMLDoc.log
 *.classpath
 *.project
 .settings
+
+AR-Android/openCVLibrary310/build/
