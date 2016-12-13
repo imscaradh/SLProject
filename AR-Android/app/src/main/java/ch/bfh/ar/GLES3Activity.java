@@ -15,35 +15,30 @@ import android.view.View;
 
 import java.io.IOException;
 
-import static android.content.Context.SENSOR_SERVICE;
 
-/**
- * Created by zinggpa on 27.11.16.
- */
-
-public class GLES2Activity extends Activity implements View.OnTouchListener, SensorEventListener {
-    GLES2View myView;                // OpenGL view
+public class GLES3Activity extends Activity implements View.OnTouchListener, SensorEventListener {
+    GLES3View myView;                // OpenGL view
     static int pointersDown = 0;    // NO. of fingers down
     static long lastTouchMS = 0;    // Time of last touch in ms
     private SensorManager mSensorManager;
 
     @Override
     protected void onCreate(Bundle icicle) {
-        Log.i("SLProject", "GLES2Activity.onCreate");
+        Log.i("SLProject", "GLES3Activity.onCreate");
         super.onCreate(icicle);
 
         // Extract (unzip) files in APK
         try {
             Log.i("SLProject", "extractAPK");
-            GLES2Lib.App = getApplication();
-            GLES2Lib.extractAPK();
+            GLES3Lib.App = getApplication();
+            GLES3Lib.extractAPK();
         } catch (IOException e) {
             Log.e("SLProject", "Error extracting files from the APK archive: " + e.getMessage());
         }
 
         // Create view
-        myView = new GLES2View(GLES2Lib.App);
-        GLES2Lib.view = myView;
+        myView = new GLES3View(GLES3Lib.App);
+        GLES3Lib.view = myView;
         myView.setOnTouchListener(this);
         Log.i("SLProject", "setContentView");
         setContentView(myView);
@@ -52,7 +47,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int dpi = (int) (((float) metrics.xdpi + (float) metrics.ydpi) * 0.5);
-        GLES2Lib.dpi = dpi;
+        GLES3Lib.dpi = dpi;
         Log.i("SLProject", "DisplayMetrics: " + dpi);
 
         // Init Sensor
@@ -61,12 +56,12 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
 
     @Override
     protected void onPause() {
-        Log.i("SLProject", "GLES2Activity.onPause");
+        Log.i("SLProject", "GLES3Activity.onPause");
         super.onPause();
         myView.onPause();
         myView.queueEvent(new Runnable() {
             public void run() {
-                GLES2Lib.onClose();
+                GLES3Lib.onClose();
             }
         });
         finish();
@@ -80,7 +75,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
 
     @Override
     protected void onResume() {
-        Log.i("SLProject", "GLES2Activity.onResume");
+        Log.i("SLProject", "GLES3Activity.onResume");
         super.onResume();
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -90,14 +85,14 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
 
     @Override
     protected void onStop() {
-        Log.i("SLProject", "GLES2Activity.onStop");
+        Log.i("SLProject", "GLES3Activity.onStop");
         super.onStop();
         System.exit(0);
     }
 
     @Override
     protected void onDestroy() {
-        Log.i("SLProject", "GLES2Activity.onDestroy");
+        Log.i("SLProject", "GLES3Activity.onDestroy");
         super.onDestroy();
     }
 
@@ -137,13 +132,13 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             if (touchDeltaMS < 250)
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onDoubleClick(1, x0, y0);
+                        GLES3Lib.onDoubleClick(1, x0, y0);
                     }
                 });
             else
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onMouseDown(1, x0, y0);
+                        GLES3Lib.onMouseDown(1, x0, y0);
                     }
                 });
         }
@@ -154,12 +149,12 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             final int y1 = (int) event.getY(1);
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onMouseUp(1, x0, y0);
+                    GLES3Lib.onMouseUp(1, x0, y0);
                 }
             });
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onTouch2Down(x0, y0, x1, y1);
+                    GLES3Lib.onTouch2Down(x0, y0, x1, y1);
                 }
             });
             // it's two fingers at the same time
@@ -175,13 +170,13 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             if (touchDeltaMS < 250)
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onMenuButton();
+                        GLES3Lib.onMenuButton();
                     }
                 });
             else
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onTouch2Down(x0, y0, x1, y1);
+                        GLES3Lib.onTouch2Down(x0, y0, x1, y1);
                     }
                 });
         }
@@ -198,7 +193,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
         if (touchCount == 1) {
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onMouseUp(1, x0, y0);
+                    GLES3Lib.onMouseUp(1, x0, y0);
                 }
             });
         } else if (touchCount == 2) {
@@ -206,7 +201,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             final int y1 = (int) event.getY(1);
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onTouch2Up(x0, y0, x1, y1);
+                    GLES3Lib.onTouch2Up(x0, y0, x1, y1);
                 }
             });
         }
@@ -225,7 +220,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
         if (touchCount == 1) {
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onMouseMove(x0, y0);
+                    GLES3Lib.onMouseMove(x0, y0);
                 }
             });
         } else if (touchCount == 2) {
@@ -233,7 +228,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             final int y1 = (int) event.getY(1);
             myView.queueEvent(new Runnable() {
                 public void run() {
-                    GLES2Lib.onTouch2Move(x0, y0, x1, y1);
+                    GLES3Lib.onTouch2Move(x0, y0, x1, y1);
                 }
             });
         }
@@ -273,7 +268,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
         Log.i("SLProject", "Menu Button pressed");
         myView.queueEvent(new Runnable() {
             public void run() {
-                GLES2Lib.onMenuButton();
+                GLES3Lib.onMenuButton();
             }
         });
         return false;
@@ -284,7 +279,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
     }
 
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR && GLES2Lib.usesRotation()) {
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR && GLES3Lib.usesRotation()) {
             // The ROTATION_VECTOR sensor is a virtual fusion sensor
             // The quality strongly depends on the underlying algorithm and on
             // the sensor manufacturer. (See also chapter 7 in the book:
@@ -306,7 +301,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
                 final float r = YPR[2] * -1.0f;
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onRotationPYR(p, y, r);
+                        GLES3Lib.onRotationPYR(p, y, r);
                     }
                 });
             } else {    // Map pitch, yaw and roll to landscape display orientation for Oculus Rift conformance
@@ -315,7 +310,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
                 final float r = YPR[1];
                 myView.queueEvent(new Runnable() {
                     public void run() {
-                        GLES2Lib.onRotationPYR(p, y, r);
+                        GLES3Lib.onRotationPYR(p, y, r);
                     }
                 });
             }
@@ -324,7 +319,7 @@ public class GLES2Activity extends Activity implements View.OnTouchListener, Sen
             // Get the rotation quaternion from the XYZ-rotation vector (see docs)
 			final float Q[] = new float[4];
 			SensorManager.getQuaternionFromVector(Q, event.values);
-			myView.queueEvent(new Runnable() {public void run() {GLES2Lib.onRotationQUAT(Q[1],Q[2],Q[3],Q[0]);}});
+			myView.queueEvent(new Runnable() {public void run() {GLES3Lib.onRotationQUAT(Q[1],Q[2],Q[3],Q[0]);}});
 			*/
         }
     }

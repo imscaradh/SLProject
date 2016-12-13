@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLContext;
 
-public class GLES2Lib {
+public class GLES3Lib {
 
     static {
         System.loadLibrary("native-lib");
@@ -20,7 +20,7 @@ public class GLES2Lib {
 
     public static Application App = null;
     public static String FilesPath = null;
-    public static GLES2View view;
+    public static GLES3View view;
     public static int dpi;
     public static boolean RTIsRunning = false;
 
@@ -71,7 +71,7 @@ public class GLES2Lib {
      */
     public static boolean RaytracingCallback() {
         // calls the OpenGL rendering to display the RT image on a simple rectangle
-        boolean stopSignal = GLES2Lib.onUpdateAndPaint();
+        boolean stopSignal = GLES3Lib.onUpdateAndPaint();
 
         // Do the OpenGL back to front buffer swap
         EGL10 mEgl = (EGL10) EGLContext.getEGL();
