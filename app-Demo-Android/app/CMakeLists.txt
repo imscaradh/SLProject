@@ -226,7 +226,7 @@ file(GLOB_RECURSE CONFIG
 )
 
 # TODO: Determine debug/release correctly
-MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
+#MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
 set(APK_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/build/intermediates/assets/debug")
 
 file(MAKE_DIRECTORY
