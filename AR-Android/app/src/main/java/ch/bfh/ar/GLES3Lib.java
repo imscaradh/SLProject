@@ -91,6 +91,8 @@ public class GLES3Lib {
         extractAPKFolder(FilesPath, "textures");
         extractAPKFolder(FilesPath, "models");
         extractAPKFolder(FilesPath, "shaders");
+        extractAPKFolder(FilesPath, "calibrations");
+        extractAPKFolder(FilesPath, "config");
     }
 
     /**

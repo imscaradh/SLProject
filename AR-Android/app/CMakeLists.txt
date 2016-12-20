@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.4.1)
 add_definitions(-DSL_GUI_JAVA)
 add_definitions(-DASSIMP_BUILD_NO_BLEND_IMPORTER)
 
+#
+# OpenCV
+#
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/main/jniInclude/include)
 
 #
@@ -197,3 +200,45 @@ target_link_libraries( native-lib
                         ${OPENGL_LIB_v3}
                         ${log-lib}
                      )
+
+#
+# Copy APK contents
+#
+file(GLOB_RECURSE TEXTURES
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/images/textures/*
+)
+
+file(GLOB_RECURSE MODELS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/models/*
+)
+
+file(GLOB_RECURSE SHADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/shaders/*.vert
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/shaders/*.frag
+)
+
+file(GLOB_RECURSE CALIBRATIONS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/calibrations/*
+)
+
+file(GLOB_RECURSE CONFIG
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/config/???
+)
+
+# TODO: Determine debug/release correctly
+MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
+set(APK_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/build/intermediates/assets/debug")
+
+file(MAKE_DIRECTORY
+    ${APK_ASSETS}/textures
+    ${APK_ASSETS}/models
+    ${APK_ASSETS}/shaders
+    ${APK_ASSETS}/calibrations
+    ${APK_ASSETS}/config
+)
+
+file(COPY ${TEXTURES} DESTINATION ${APK_ASSETS}/textures)
+file(COPY ${MODELS} DESTINATION ${APK_ASSETS}/models)
+file(COPY ${SHADERS} DESTINATION ${APK_ASSETS}/shaders)
+file(COPY ${CALIBRATIONS} DESTINATION ${APK_ASSETS}/calibrations)
+file(COPY ${CONFIG} DESTINATION ${APK_ASSETS}/config)
