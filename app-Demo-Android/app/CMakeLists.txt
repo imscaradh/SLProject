@@ -225,9 +225,7 @@ file(GLOB_RECURSE CONFIG
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../../_data/config/???
 )
 
-# TODO: Determine debug/release correctly
-#MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
-set(APK_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/build/intermediates/assets/debug")
+set(APK_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/src/main/assets")
 
 file(MAKE_DIRECTORY
     ${APK_ASSETS}/textures
