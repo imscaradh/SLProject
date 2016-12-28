@@ -29,8 +29,8 @@ class SLButton;
 class SLText;
 
 //-----------------------------------------------------------------------------
-typedef std::vector<SLSceneView*> SLVSceneView; //!< Vector of SceneView pointers
-typedef std::vector<SLCVTracker*> SLVCVTracker; //!< Vector of CV tracker pointers
+typedef vector<SLSceneView*> SLVSceneView; //!< Vector of SceneView pointers
+typedef vector<SLCVTracker*> SLVCVTracker; //!< Vector of CV tracker pointers
 //-----------------------------------------------------------------------------
 //! The SLScene class represents the top level instance holding the scene structure
 /*!      
@@ -115,12 +115,14 @@ class SLScene: public SLObject
             SLNode*         selectedNode        () {return _selectedNode;}
             SLMesh*         selectedMesh        () {return _selectedMesh;}
             SLbool          stopAnimations      () const {return _stopAnimations;}
-            SLGLOculus*     oculus              () {return &_oculus;}   
+            SLGLOculus*     oculus              () {return &_oculus;}
+            #ifdef SL_HAS_OPENCV
             SLbool          usesVideo           () {return _usesVideo;}
             SLbool          usesVideoAsBckgrnd  () {return _background.texture() == &_videoTexture;}
             SLGLTexture*    videoTexture        () {return &_videoTexture;}
             SLCVCalibration& calibration        () {return _calibration;}
             SLVCVTracker&   trackers            () {return _trackers;}
+            #endif // SL_HAS_OPENCV
             
             // Misc.
    virtual  void            onLoad              (SLSceneView* sv, 
@@ -199,10 +201,12 @@ class SLScene: public SLObject
             SLGLOculus      _oculus;            //!< Oculus Rift interface
             
             // Augmented Reality stuff
+            #ifdef SL_HAS_OPENCV
             SLbool          _usesVideo;         //!< Flag for using the live video image
             SLGLTexture     _videoTexture;      //!< Texture for live video image
             SLCVCalibration _calibration;       //!< OpenCV calibration manager
             SLVCVTracker    _trackers;          //!< Vector of all AR trackers
+            #endif // SL_HAS_OPENCV
 };
 //-----------------------------------------------------------------------------
 #endif

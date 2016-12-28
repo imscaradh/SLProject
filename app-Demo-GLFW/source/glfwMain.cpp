@@ -58,8 +58,10 @@ onPaint: Paint event handler that passes the event to the slPaint function.
 SLbool onPaint()
 {
     // If live video image is requested grab it and copy it
+    #ifdef SL_HAS_OPENCV
     if (slUsesVideo())
         SLCVCapture::grabAndAdjustForSL();
+    #endif
 
     //////////////////////////////////////////////////
     bool viewNeedsRepaint = slUpdateAndPaint(svIndex);
@@ -411,7 +413,7 @@ int main(int argc, char *argv[])
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     //You can enable or restrict newer OpenGL context here (read the GLFW documentation)
-    #ifdef SL_OS_MACOSX
+    #ifdef SL_OS_MACOS
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -484,14 +486,16 @@ int main(int argc, char *argv[])
 
 
     // get executable path
-    SLstring exeDir = SLUtils::getPath(cmdLineArgs[0]);
+    //SLstring exeDir = SLUtils::getPath(cmdLineArgs[0]);
+    SLstring exeDir = SLFileSystem::getCurrentWorkingDir();
+    SLstring configDir = SLFileSystem::getAppsWritableDir();
 
     slCreateScene(cmdLineArgs,
                   exeDir + "../_data/shaders/",
                   exeDir + "../_data/models/",
                   exeDir + "../_data/images/textures/",
                   exeDir + "../_data/calibrations/",
-                  exeDir + "../_data/calibrations/");
+                  configDir);
 
     svIndex = slCreateSceneView((int)(scrWidth  * scr2fbX),
                                 (int)(scrHeight * scr2fbY),
