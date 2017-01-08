@@ -24,15 +24,15 @@ JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onInit(JNIEnv *env, jobject obj, 
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onUpdateAndPaint(JNIEnv *env, jobject obj);
 JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onResize(JNIEnv *env, jobject obj, jint width, jint height);
 JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMenuButton(JNIEnv *env, jobject obj);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseDown(JNIEnv *env, jobject obj, jint button, jint x, jint y);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseUp(JNIEnv *env, jobject obj, jint button, jint x, jint y);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseMove(JNIEnv *env, jobject obj, jint x, jint y);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Up(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Down(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Move(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onDoubleClick(JNIEnv *env, jobject obj, jint button, jint x, jint y);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationPYR(JNIEnv *env, jobject obj, jfloat pitchRAD, jfloat yawRAD, jfloat rollRAD);
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationQUAT(JNIEnv *env, jobject obj, jfloat quatX, jfloat quatY, jfloat quatZ, jfloat quatW);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseDown(JNIEnv *env, jobject obj, jint button, jint x, jint y);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseUp(JNIEnv *env, jobject obj, jint button, jint x, jint y);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseMove(JNIEnv *env, jobject obj, jint x, jint y);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Up(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Down(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Move(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onDoubleClick(JNIEnv *env, jobject obj, jint button, jint x, jint y);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationPYR(JNIEnv *env, jobject obj, jfloat pitchRAD, jfloat yawRAD, jfloat rollRAD);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationQUAT(JNIEnv *env, jobject obj, jfloat quatX, jfloat quatY, jfloat quatZ, jfloat quatW);
 JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onClose(JNIEnv *env, jobject obj);
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_shouldClose(JNIEnv *env, jobject obj);
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_usesRotation(JNIEnv *env, jobject obj);
@@ -96,39 +96,40 @@ JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMenuButton(JNIEnv *env, jobject
     slCommand(svIndex, C_menu);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseDown(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseDown(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
+    SL_LOG("mouse_down");
     slMouseDown(svIndex, MB_left, x, y, K_none);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseUp(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseUp(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
     slMouseUp(svIndex, MB_left, x, y, K_none);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseMove(JNIEnv *env, jobject obj, jint x, jint y) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onMouseMove(JNIEnv *env, jobject obj, jint x, jint y) {
     slMouseMove(svIndex, x, y);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Down(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Down(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
     slTouch2Down(svIndex, x1, y1, x2, y2);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Up(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Up(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
     slTouch2Up(svIndex, x1, y1, x2, y2);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Move(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onTouch2Move(JNIEnv *env, jobject obj, jint x1, jint y1, jint x2, jint y2) {
     slTouch2Move(svIndex, x1, y1, x2, y2);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onDoubleClick(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onDoubleClick(JNIEnv *env, jobject obj, jint button, jint x, jint y) {
     slDoubleClick(svIndex, MB_left, x, y, K_none);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationPYR(JNIEnv *env, jobject obj, jfloat pitchRAD, jfloat yawRAD, jfloat rollRAD) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationPYR(JNIEnv *env, jobject obj, jfloat pitchRAD, jfloat yawRAD, jfloat rollRAD) {
     slRotationPYR(svIndex, pitchRAD, yawRAD, rollRAD);
 }
 //-----------------------------------------------------------------------------
-JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationQUAT(JNIEnv *env, jobject obj, jfloat quatX, jfloat quatY, jfloat quatZ, jfloat quatW) {
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onRotationQUAT(JNIEnv *env, jobject obj, jfloat quatX, jfloat quatY, jfloat quatZ, jfloat quatW) {
     slRotationQUAT(svIndex, quatX, quatY, quatZ, quatW);
 }
 //-----------------------------------------------------------------------------
