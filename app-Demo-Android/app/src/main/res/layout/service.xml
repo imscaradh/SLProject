@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:opencv="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="0dp"
+              android:orientation="horizontal"
+              android:padding="0dp"
+              android:weightSum="100"
+              android:windowIsFloating="false">
+
+
+    <RelativeLayout
+        android:id="@+id/clickableView"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="90"
+        android:background="#00ff00"
+        android:clickable="false"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:id="@+id/camera_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ff00"
+            android:orientation="vertical"
+            android:visibility="visible"/>
+
+        <FrameLayout
+            android:id="@+id/container_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#0000ff"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/right"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="10"
+        android:background="@color/colorPrimaryDark"
+        android:clickable="false"
+        android:orientation="vertical"
+        >
+
+
+        <ImageButton
+            android:id="@+id/exit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="4dp"
+            android:background="@color/colorAccent"
+            android:src="@android:drawable/ic_delete"
+            />
+    </LinearLayout>
+</LinearLayout>

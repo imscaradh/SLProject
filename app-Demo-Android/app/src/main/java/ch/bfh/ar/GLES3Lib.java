@@ -62,6 +62,8 @@ public class GLES3Lib {
 
     public static native boolean usesVideoImage();
 
+    public static native void passImageMat(long matAddrGray);
+
     /**
      * The RaytracingCallback function is used to repaint the ray tracing image during the
      * ray tracing process. Only the GUI bound OpenGL context can call the swap the buffer

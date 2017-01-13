@@ -37,6 +37,7 @@ JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onClose(JNIEnv *env, jobject obj)
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_shouldClose(JNIEnv *env, jobject obj);
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_usesRotation(JNIEnv *env, jobject obj);
 JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_usesVideoImage(JNIEnv *env, jobject obj);
+JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_passImageMat(JNIEnv *env, jobject obj, jlong matAddr);
 };
 
 //-----------------------------------------------------------------------------
@@ -78,7 +79,7 @@ JNIEXPORT void JNICALL Java_ch_bfh_ar_GLES3Lib_onInit(JNIEnv *env, jobject obj, 
     svIndex = slCreateSceneView((int) width,
                                 (int) height,
                                 (int) dpi,
-                                C_sceneMeshLoad,
+                                C_menu,
                                 (void *) &Java_renderRaytracingCallback);
     delete cmdLineArgs;
 }
@@ -151,3 +152,6 @@ JNIEXPORT bool JNICALL Java_ch_bfh_ar_GLES3Lib_usesVideoImage(JNIEnv *env, jobje
     return slUsesVideo();//slUsesVideoImage();
 }
 
+JNIEXPORT void Java_ch_bfh_ar_GLES3Lib_passImageMat(JNIEnv *env, jobject obj, jlong matAddr) {
+    cv::Mat &mGr = *(cv::Mat *) matAddr;
+}

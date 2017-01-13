@@ -1,7 +1,7 @@
 //#############################################################################
 //  File:      SLCVCapture.cpp
 //  Purpose:   OpenCV Capture Device
-//  Author:    Michael Göttlicher, Marcus Hudritsch
+//  Author:    Michael Gï¿½ttlicher, Marcus Hudritsch
 //  Date:      Winter 2016
 //  Codestyle: https://github.com/cpvrlab/SLProject/wiki/Coding-Style-Guidelines
 //  Copyright: Marcus Hudritsch
@@ -38,7 +38,7 @@ SLVec2i SLCVCapture::open(SLint deviceNum)
 {
     try
     {
-        _captureDevice.open(deviceNum);
+        _captureDevice.open(0);
 
         if (!_captureDevice.isOpened())
             return SLVec2i::ZERO;

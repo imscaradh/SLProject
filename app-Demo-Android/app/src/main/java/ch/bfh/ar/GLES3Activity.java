@@ -1,19 +1,39 @@
 package ch.bfh.ar;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.IntentService;
+import android.app.Service;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.provider.Settings;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Size;
+import org.opencv.videoio.VideoCapture;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class GLES3Activity extends Activity implements View.OnTouchListener, SensorEventListener {
@@ -22,25 +42,28 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
     static long lastTouchMS = 0;    // Time of last touch in ms
     private SensorManager mSensorManager;
 
+    private static final String TAG = "SLProject";
+
+
     @Override
     protected void onCreate(Bundle icicle) {
-        Log.i("SLProject", "GLES3Activity.onCreate");
+        Log.i(TAG, "GLES3Activity.onCreate");
         super.onCreate(icicle);
 
         // Extract (unzip) files in APK
         try {
-            Log.i("SLProject", "extractAPK");
+            Log.i(TAG, "extractAPK");
             GLES3Lib.App = getApplication();
             GLES3Lib.extractAPK();
         } catch (IOException e) {
-            Log.e("SLProject", "Error extracting files from the APK archive: " + e.getMessage());
+            Log.e(TAG, "Error extracting files from the APK archive: " + e.getMessage());
         }
 
         // Create view
         myView = new GLES3View(GLES3Lib.App);
         GLES3Lib.view = myView;
         myView.setOnTouchListener(this);
-        Log.i("SLProject", "setContentView");
+        Log.i(TAG, "setContentView");
         setContentView(myView);
 
         // Get display resolution. This is used to scale the menu buttons accordingly
@@ -48,34 +71,45 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int dpi = (int) (((float) metrics.xdpi + (float) metrics.ydpi) * 0.5);
         GLES3Lib.dpi = dpi;
-        Log.i("SLProject", "DisplayMetrics: " + dpi);
+        Log.i(TAG, "DisplayMetrics: " + dpi);
 
         // Init Sensor
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        ActivityCompat.requestPermissions(GLES3Activity.this,
+                new String[]{Manifest.permission.CAMERA},
+                1);
+
+        Log.i(TAG, "Going to start camera service...");
+        initCameraService();
+    }
+
+    private void initCameraService() {
+        startService(new Intent(getBaseContext(), CameraService.class));
     }
 
     @Override
     protected void onPause() {
-        Log.i("SLProject", "GLES3Activity.onPause");
+        Log.i(TAG, "GLES3Activity.onPause");
         super.onPause();
-        myView.onPause();
-        myView.queueEvent(new Runnable() {
-            public void run() {
-                GLES3Lib.onClose();
-            }
-        });
-        finish();
-
-        mSensorManager.unregisterListener(this);
-
-        Log.i("SLProject", "System.exit(0)");
-        System.exit(0);
+//        myView.onPause();
+//        myView.queueEvent(new Runnable() {
+//            public void run() {
+//                GLES3Lib.onClose();
+//            }
+//        });
+//        finish();
+//
+//        mSensorManager.unregisterListener(this);
+//
+//        Log.i(TAG, "System.exit(0)");
+//        System.exit(0);
         //android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @Override
     protected void onResume() {
-        Log.i("SLProject", "GLES3Activity.onResume");
+        Log.i(TAG, "GLES3Activity.onResume");
         super.onResume();
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -85,15 +119,36 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
 
     @Override
     protected void onStop() {
-        Log.i("SLProject", "GLES3Activity.onStop");
+        Log.i(TAG, "GLES3Activity.onStop");
         super.onStop();
         System.exit(0);
     }
 
     @Override
     protected void onDestroy() {
-        Log.i("SLProject", "GLES3Activity.onDestroy");
+        Log.i(TAG, "GLES3Activity.onDestroy");
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(GLES3Activity.this, "Permission denied ", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     /**
@@ -120,7 +175,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
         int touchCount = event.getPointerCount();
         final int x0 = (int) event.getX(0);
         final int y0 = (int) event.getY(0);
-        //Log.i("SLProject", "Dn:" + touchCount);
+        //Log.i(TAG, "Dn:" + touchCount);
 
         // just got a new single touch
         if (touchCount == 1) {
@@ -187,7 +242,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
 
     public boolean handleTouchUp(final MotionEvent event) {
         int touchCount = event.getPointerCount();
-        //Log.i("SLProject", "Up:" + touchCount + " x: " + (int)event.getX(0) + " y: " + (int)event.getY(0));
+        //Log.i(TAG, "Up:" + touchCount + " x: " + (int)event.getX(0) + " y: " + (int)event.getY(0));
         final int x0 = (int) event.getX(0);
         final int y0 = (int) event.getY(0);
         if (touchCount == 1) {
@@ -215,7 +270,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
         final int x0 = (int) event.getX(0);
         final int y0 = (int) event.getY(0);
         int touchCount = event.getPointerCount();
-        //Log.i("SLProject", "Mv:" + touchCount);
+        //Log.i(TAG, "Mv:" + touchCount);
 
         if (touchCount == 1) {
             myView.queueEvent(new Runnable() {
@@ -239,7 +294,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
     @Override
     public boolean onTouch(View v, final MotionEvent event) {
         if (event == null) {
-            Log.i("SLProject", "onTouch: null event");
+            Log.i(TAG, "onTouch: null event");
             return false;
         }
 
@@ -255,9 +310,9 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
                 return handleTouchUp(event);
             else if (actionCode == MotionEvent.ACTION_MOVE)
                 return handleTouchMove(event);
-            else Log.i("SLProject", "Unhandeled Event: " + actionCode);
+            else Log.i(TAG, "Unhandeled Event: " + actionCode);
         } catch (Exception ex) {
-            Log.i("SLProject", "onTouch (Exception: " + actionCode);
+            Log.i(TAG, "onTouch (Exception: " + actionCode);
         }
 
         return false;
@@ -265,7 +320,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i("SLProject", "Menu Button pressed");
+        Log.i(TAG, "Menu Button pressed");
         myView.queueEvent(new Runnable() {
             public void run() {
                 GLES3Lib.onMenuButton();
@@ -275,7 +330,7 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        Log.i("SLProject", String.format("onAccuracyChanged"));
+        Log.i(TAG, String.format("onAccuracyChanged"));
     }
 
     public void onSensorChanged(SensorEvent event) {
@@ -323,4 +378,6 @@ public class GLES3Activity extends Activity implements View.OnTouchListener, Sen
 			*/
         }
     }
+
+
 }

@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 3.4.1)
 
 add_definitions(-DSL_GUI_JAVA)
 add_definitions(-DASSIMP_BUILD_NO_BLEND_IMPORTER)
+add_definitions(-DSL_HAS_OPENCV)
+add_definitions(-DSL_USES_CVCAPTURE)
 
 #
 # OpenCV
